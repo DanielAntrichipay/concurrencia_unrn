@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Play, RefreshCw, HardDrive, CheckCircle, Clock, File, AlertTriangle } from 'lucide-react';
+import { Play, RefreshCw, HardDrive, CheckCircle, Clock, File, AlertTriangle, Trash2 } from 'lucide-react';
 import type { BackupConfig, BackupExecutionResponse } from '../types';
 
 export const PerformBackup: React.FC = () => {
@@ -33,6 +33,27 @@ export const PerformBackup: React.FC = () => {
   useEffect(() => {
     fetchConfigs();
   }, []);
+
+  const handleDeleteConfig = async (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    if (!window.confirm('¿Estás seguro de que deseas eliminar esta configuración?')) return;
+    
+    try {
+      const res = await fetch(`/api/backups/${id}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) throw new Error('Error al eliminar configuración');
+      
+      const newConfigs = configs.filter(c => c.id !== id);
+      setConfigs(newConfigs);
+      if (selectedConfigId === id) {
+        setSelectedConfigId(newConfigs.length > 0 ? newConfigs[0].id : '');
+        setExecutionResult(null);
+      }
+    } catch (err: any) {
+      setError(err.message || 'Error al eliminar');
+    }
+  };
 
   const handleExecute = async () => {
     if (!selectedConfigId) return;
@@ -103,7 +124,13 @@ export const PerformBackup: React.FC = () => {
                 >
                   <div className="flex justify-between items-center">
                     <h3 className="config-item-title">{config.name}</h3>
-                    {config.enabled && <span className="badge badge-success">Activo</span>}
+                    <button 
+                      onClick={(e) => handleDeleteConfig(e, config.id)}
+                      className="btn btn-danger-outline flex items-center gap-2"
+                      title="Borrar configuración"
+                    >
+                      <Trash2 size={15} /> Borrar
+                    </button>
                   </div>
                   <div className="text-muted mt-2 text-sm flex items-center gap-2">
                     <HardDrive size={16} /> 

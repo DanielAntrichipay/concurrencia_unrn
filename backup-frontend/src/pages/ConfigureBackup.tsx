@@ -141,7 +141,6 @@ export const ConfigureBackup: React.FC = () => {
                   placeholder="/ruta/a/respaldar" 
                   value={path}
                   onChange={(e) => handleSourcePathChange(index, e.target.value)}
-                  required 
                 />
                 <button type="button" className="btn-icon" onClick={() => removeSourcePath(index)}>
                   <Trash2 size={18} />

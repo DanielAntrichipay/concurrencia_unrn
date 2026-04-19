@@ -11,9 +11,12 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.SQLRestriction;
+
 @Entity
 @Getter
 @Setter
+@SQLRestriction("enabled  = true")
 public class BackupConfig extends Lifecycle {
     private String name;
 
@@ -25,7 +28,7 @@ public class BackupConfig extends Lifecycle {
     private String destinationPath;
     private Integer threadCount;
     private String osType;
-    
+
     private boolean includeStandardPaths; // Para activar Carpetas de Usuario (Imágenes, Docs, etc.)
     private Double maxSizeGb;
 
