@@ -1,6 +1,7 @@
 package com.example.demo.ConfigBackup.update;
 
 import com.example.demo.ConfigBackup.BackupMapper;
+import org.springframework.stereotype.Component;
 import com.example.demo.ConfigBackup.BackupRepository;
 import com.example.demo.common.entities.BackupConfig;
 import com.example.demo.common.exceptions.NotFoundException;
@@ -8,6 +9,7 @@ import com.example.demo.common.mediator.Handler;
 import lombok.RequiredArgsConstructor;
 
 @Handler
+@Component
 @RequiredArgsConstructor
 public class UpdateBackupHandler {
 

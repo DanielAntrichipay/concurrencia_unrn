@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { HardDrive, Settings, PlayCircle, Home } from 'lucide-react';
+import { HardDrive, Settings, PlayCircle, Home, BarChart2 } from 'lucide-react';
 
 export const Navigation: React.FC = () => {
   const location = useLocation();
@@ -8,6 +8,7 @@ export const Navigation: React.FC = () => {
     { path: '/', label: 'Inicio', icon: Home },
     { path: '/configure', label: 'Configurar', icon: Settings },
     { path: '/perform', label: 'Ejecutar', icon: PlayCircle },
+    { path: '/history', label: 'Métricas', icon: BarChart2 },
   ];
 
   return (

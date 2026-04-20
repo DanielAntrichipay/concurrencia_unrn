@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Play, RefreshCw, HardDrive, CheckCircle, Clock, File, AlertTriangle, Trash2 } from 'lucide-react';
+import { Play, RefreshCw, HardDrive, CheckCircle, Clock, File, AlertTriangle, Trash2, Pencil } from 'lucide-react';
 import type { BackupConfig, BackupExecutionResponse } from '../types';
+import { EditBackupModal } from '../components/EditBackupModal';
 
 export const PerformBackup: React.FC = () => {
   const [configs, setConfigs] = useState<BackupConfig[]>([]);
@@ -12,6 +13,7 @@ export const PerformBackup: React.FC = () => {
   
   const [executing, setExecuting] = useState(false);
   const [executionResult, setExecutionResult] = useState<BackupExecutionResponse | null>(null);
+  const [editingConfig, setEditingConfig] = useState<BackupConfig | null>(null);
 
   const fetchConfigs = async () => {
     setLoading(true);
@@ -53,6 +55,11 @@ export const PerformBackup: React.FC = () => {
     } catch (err: any) {
       setError(err.message || 'Error al eliminar');
     }
+  };
+
+  const handleSaved = (updated: BackupConfig) => {
+    setConfigs(prev => prev.map(c => c.id === updated.id ? updated : c));
+    setEditingConfig(null);
   };
 
   const handleExecute = async () => {
@@ -115,7 +122,7 @@ export const PerformBackup: React.FC = () => {
           ) : configs.length === 0 ? (
             <p className="text-muted text-center py-4">No hay configuraciones. Crea una primero.</p>
           ) : (
-            <div className="flex flex-col gap-4 scrollable-list">
+            <div className="flex flex-col gap-4 scrollable-list" style={{ paddingTop: '4px' }}>
               {configs.map(config => (
                 <div 
                   key={config.id}
@@ -124,13 +131,30 @@ export const PerformBackup: React.FC = () => {
                 >
                   <div className="flex justify-between items-center">
                     <h3 className="config-item-title">{config.name}</h3>
-                    <button 
-                      onClick={(e) => handleDeleteConfig(e, config.id)}
-                      className="btn btn-danger-outline flex items-center gap-2"
-                      title="Borrar configuración"
-                    >
-                      <Trash2 size={15} /> Borrar
-                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setEditingConfig(config); }}
+                        className="btn flex items-center gap-2"
+                        title="Editar configuración"
+                        style={{
+                          background: 'rgba(59,130,246,0.08)',
+                          color: 'var(--primary)',
+                          border: '1px solid rgba(59,130,246,0.25)',
+                          padding: '0.4rem 0.75rem',
+                          fontSize: '0.85rem',
+                          borderRadius: '6px',
+                        }}
+                      >
+                        <Pencil size={14} /> Editar
+                      </button>
+                      <button 
+                        onClick={(e) => handleDeleteConfig(e, config.id)}
+                        className="btn btn-danger-outline flex items-center gap-2"
+                        title="Borrar configuración"
+                      >
+                        <Trash2 size={15} /> Borrar
+                      </button>
+                    </div>
                   </div>
                   <div className="text-muted mt-2 text-sm flex items-center gap-2">
                     <HardDrive size={16} /> 
@@ -240,6 +264,14 @@ export const PerformBackup: React.FC = () => {
             </div>
           )}
         </div>
+      )}
+
+      {editingConfig && (
+        <EditBackupModal
+          config={editingConfig}
+          onClose={() => setEditingConfig(null)}
+          onSaved={handleSaved}
+        />
       )}
     </div>
   );

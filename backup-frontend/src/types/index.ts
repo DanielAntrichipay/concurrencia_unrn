@@ -7,6 +7,10 @@ export interface BackupConfig {
   osType?: string;
   enabled?: boolean;
   createdOn?: string;
+  includeStandardPaths?: boolean;
+  maxSizeGb?: number;
+  includedExtensions?: string[];
+  excludedExtensions?: string[];
 }
 
 export interface BackupExecutionResponse {
