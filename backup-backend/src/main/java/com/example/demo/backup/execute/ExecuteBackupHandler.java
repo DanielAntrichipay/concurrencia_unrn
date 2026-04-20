@@ -1,6 +1,5 @@
 package com.example.demo.backup.execute;
 
-import com.example.demo.ConfigBackup.BackupExecutionRepository;
 import com.example.demo.common.entities.BackupConfig;
 import com.example.demo.common.entities.BackupExecution;
 import com.example.demo.common.mediator.Handler;
