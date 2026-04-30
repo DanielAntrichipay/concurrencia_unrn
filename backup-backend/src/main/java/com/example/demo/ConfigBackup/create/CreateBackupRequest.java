@@ -22,7 +22,7 @@ public class CreateBackupRequest implements IRequest<CreateBackupResponse> {
     @Schema(description = "Lista de directorios a respaldar", example = "[\"/home/user/documentos\", \"/var/www/html\"]")
     private List<String> sourcePaths;
 
-    @Schema(description = "Directorio donde se guardará el backup", example = "/mnt/backup_drive/2026")
+    @Schema(description = "Directorio donde se guardará el backup", example = "/home/user/backups/manual")
     private String destinationPath;
 
     @Schema(description = "Cantidad de hilos para procesamiento paralelo", example = "4", defaultValue = "1")
